@@ -105,13 +105,13 @@ class Toc
         @tab = "\t"
     if Object.keys(@list).length > 0
       text = []
-      text.push "<!-- TOC titleSize:"+@options.titleSize+" tabSpaces:"+@options.tabSpaces+" depthFrom:"+@options.depthFrom+" depthTo:"+@options.depthTo+" withLinks:"+@options.withLinks+" updateOnSave:"+@options.updateOnSave+" orderedList:"+@options.orderedList+" skip:"+@options.skip+" title:"+@options.title+" -->\n"
+      text.push "<!-- TOC titleSize:"+@options.titleSize+" tabSpaces:"+@options.tabSpaces+" depthFrom:"+@options.depthFrom+" depthTo:"+@options.depthTo+" withLinks:"+@options.withLinks+" updateOnSave:"+@options.updateOnSave+" orderedList:"+@options.orderedList+" skip:"+@options.skip+" title:"+@options.title+" -->"
       if @options.title
         text.push new String("#").repeat(@options.titleSize) + " Table of Contents"
       list = @__createList()
       if list isnt false
         Array.prototype.push.apply text, list
-      text.push "\n<!-- /TOC -->"
+      text.push "<!-- /TOC -->"
       return text.join "\n"
     return ""
 
