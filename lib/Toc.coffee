@@ -8,7 +8,7 @@ class Toc
     @tab = "\t"
     @options =
       titleSize: 2  # titleSize
-      tabSpaces: @editor.getTabLength()  # tabSpaces 0 for hard-tab
+      tabSpaces: @_getTabLength() # tabSpaces 0 for hard-tab
       depthFrom: 1  # depthFrom
       depthTo: 6  # depthTo
       withLinks: 1  # withLinks
@@ -30,10 +30,7 @@ class Toc
 
 
   create: ->
-    if @_hasToc()
-      @_deleteToc()
-      @editor.setTextInBufferRange [[@open,0], [@open,0]], @_createToc()
-    @editor.insertText @_createToc()
+    @update()
 
 
   update: ->
@@ -54,6 +51,7 @@ class Toc
       @_deleteToc()
       @editor.setTextInBufferRange [[@open,0], [@open,0]], @_createToc()
 
+
   toggle: ->
     if @_hasToc()
       @_deleteToc()
@@ -61,8 +59,14 @@ class Toc
       @editor.insertText @_createToc()
 
 
-
   # ----------------------------------------------------------------------------
+
+
+  _getTabLength: () ->
+    try
+      tabLength = @editor.getTabLength()
+    catch error
+    return tabLength || 2
 
 
   _hasToc: () ->
