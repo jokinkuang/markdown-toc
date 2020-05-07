@@ -8,7 +8,7 @@ class Toc
     @tab = "\t"
     @options =
       titleSize: 2  # titleSize
-      tabSpaces: @editor.getTabLength()  # tabSpaces 0 for hard-tab
+      tabSpaces: @_getTabLength() # tabSpaces 0 for hard-tab
       depthFrom: 1  # depthFrom
       depthTo: 6  # depthTo
       withLinks: 1  # withLinks
@@ -64,6 +64,11 @@ class Toc
 
   # ----------------------------------------------------------------------------
 
+  _getTabLength: () ->
+    try
+      tabLength = @editor.getTabLength()
+    catch error
+    return tabLength || 2
 
   _hasToc: () ->
     @___updateLines()
