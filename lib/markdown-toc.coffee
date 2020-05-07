@@ -5,7 +5,6 @@ module.exports =
   activate: (state) ->
     atom.workspace.observeTextEditors (editor) =>
       if editor.getRootScopeDescriptor().scopes[0] == 'text.md'
-        console.log 'YAY'
         @toc = new Toc(editor)
         @toc.update()
 
