@@ -2,8 +2,10 @@
 To understand how Github deal with accentued chars.
 
 # TOC
-<!-- TOC titleSize:2 tabSpaces:2 depthFrom:0 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
+<!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:0 title:1 charForUnorderedList:* -->
 ## Table of Contents
+* [Test file](#test-file)
+* [TOC](#toc)
 * [Title 1](#title-1)
   * [Title 2](#title-2)
     * [Title 3](#title-3)

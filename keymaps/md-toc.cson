@@ -8,6 +8,6 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
 'atom-workspace':
-  'ctrl-alt-c': 'markdown-toc:create'
-  'ctrl-alt-u': 'markdown-toc:update'
-  'ctrl-alt-r': 'markdown-toc:delete'
+  'ctrl-alt-c': 'md-toc:create'
+  'ctrl-alt-u': 'md-toc:update'
+  'ctrl-alt-r': 'md-toc:delete'

@@ -1,27 +1,27 @@
 {
-  "name": "markdown-toc",
-  "main": "./lib/markdown-toc",
-  "version": "0.6.1",
+  "name": "md-toc",
+  "main": "./lib/md-toc",
+  "version": "0.6.2",
   "description": "Generate TOC (table of contents) of headlines from parsed markdown file",
   "activationHooks": [
     "text.md:root-scope-used"
   ],
   "activationCommands": {
     "atom-workspace": [
-      "markdown-toc:toggle",
-      "markdown-toc:create",
-      "markdown-toc:update",
-      "markdown-toc:delete"
+      "md-toc:toggle",
+      "md-toc:create",
+      "md-toc:update",
+      "md-toc:delete"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ponsfrilus/markdown-toc"
+    "url": "https://github.com/ponsfrilus/md-toc"
   },
   "bugs": {
-    "url": "https://github.com/ponsfrilus/markdown-toc/issues"
+    "url": "https://github.com/ponsfrilus/md-toc/issues"
   },
-  "homepage": "https://github.com/ponsfrilus/markdown-toc",
+  "homepage": "https://github.com/ponsfrilus/md-toc",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
