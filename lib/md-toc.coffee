@@ -4,7 +4,8 @@ module.exports =
 
   activate: (state) ->
     atom.workspace.observeTextEditors (editor) =>
-      if editor.getRootScopeDescriptor().scopes[0] == 'text.md'
+      if editor.getRootScopeDescriptor().scopes[0] == 'text.md' or
+         editor.getRootScopeDescriptor().scopes[0] == 'source.gfm'
         @toc = new Toc(editor)
         @toc.update()
     atom.commands.add 'atom-workspace', 'md-toc:create': =>
