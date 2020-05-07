@@ -162,7 +162,9 @@ class Toc
       for tab in [depthFrom..item.depth] when tab > depthFirst
         if depthFirst isnt -1
           row.push @tab
+
       if @options.orderedList is 1
+        row.push @tab.repeat(item.depth-1)
         row.push ++indicesOfDepth[item.depth-1] + ". "
         indicesOfDepth = indicesOfDepth.map((value, index) -> if index < item.depth then value else 0)
       else
