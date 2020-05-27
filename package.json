@@ -1,7 +1,7 @@
 {
   "name": "md-toc",
   "main": "./lib/md-toc",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Generate TOC (table of contents) of headlines from parsed markdown file",
   "activationHooks": [
     "text.md:root-scope-used",
