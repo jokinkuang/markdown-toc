@@ -29,6 +29,11 @@ class Toc
   # ----------------------------------------------------------------------------
   # main methods (highest logic level)
 
+  init: ->
+    if @_hasToc()
+      @_deleteToc()
+      @editor.setTextInBufferRange [[@open,0], [@open,0]], @_createToc()
+
 
   create: ->
     @update()

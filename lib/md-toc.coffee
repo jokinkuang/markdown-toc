@@ -7,7 +7,7 @@ module.exports =
       if editor.getRootScopeDescriptor().scopes[0] == 'text.md' or
          editor.getRootScopeDescriptor().scopes[0] == 'source.gfm'
         @toc = new Toc(editor)
-        @toc.update()
+        @toc.init()
     atom.commands.add 'atom-workspace', 'md-toc:create': =>
         @toc = new Toc(atom.workspace.getActivePaneItem())
         @toc.create()
