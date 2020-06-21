@@ -1,11 +1,27 @@
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:0 title:1 charForUnorderedList:* -->
 ## Table of Contents
+* [0.13.0](#0130)
+* [0.12.0](#0120)
+* [0.10.0](#0100)
+* [0.9.0](#090)
 * [0.6.2](#062)
 * [0.6.0](#060)
 * [0.5.0](#050)
 * [0.4.2](#042)
 * [0.2.3](#023)
 <!-- /TOC -->
+
+## 0.13.0
+Fix getTablength issue (#5)
+
+## 0.12.0
+Bug fixes
+
+## 0.10.0
+Better init function
+
+## 0.9.0
+Allow default GFM language grammar
 
 ## 0.6.2
 Package renamed from markdown-toc to md-toc

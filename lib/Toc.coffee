@@ -70,7 +70,7 @@ class Toc
 
   _getTabLength: () ->
     try
-      tabLength = @editor.getTabLength()
+      tabLength = atom.config.get('editor.tabLength', scope: @editor.getRootScopeDescriptor())
     catch error
     return tabLength || 2
 
