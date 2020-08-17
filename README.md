@@ -51,7 +51,7 @@ or
 
 ```bash
 cd ~/.atom/packages
-git clone git@github.com:ponsfrilus/md-toc.git
+/usr/bin/git clone git@github.com:ponsfrilus/md-toc.git
 ```
 
 
