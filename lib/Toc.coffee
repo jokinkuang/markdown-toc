@@ -8,12 +8,15 @@ class Toc
     @tab = "\t"
     @options =
       titleSize: 2  # titleSize
-      tabSpaces: @editor.getTabLength()  # tabSpaces 0 for hard-tab
+      tabSpaces: @_getTabLength() # tabSpaces 0 for hard-tab
       depthFrom: 1  # depthFrom
       depthTo: 6  # depthTo
       withLinks: 1  # withLinks
       updateOnSave: 1 # updateOnSave
       orderedList: 0 # orderedList
+      skip: 0 # skip 0 to n titles
+      title: 1 # Display or not the TOC title
+      charForUnorderedList: '*'
 
     at = @
     @editor.getBuffer().onWillSave () ->
@@ -26,12 +29,14 @@ class Toc
   # ----------------------------------------------------------------------------
   # main methods (highest logic level)
 
-
-  create: ->
+  init: ->
     if @_hasToc()
       @_deleteToc()
       @editor.setTextInBufferRange [[@open,0], [@open,0]], @_createToc()
-    @editor.insertText @_createToc()
+
+
+  create: ->
+    @update()
 
 
   update: ->
@@ -52,6 +57,7 @@ class Toc
       @_deleteToc()
       @editor.setTextInBufferRange [[@open,0], [@open,0]], @_createToc()
 
+
   toggle: ->
     if @_hasToc()
       @_deleteToc()
@@ -59,8 +65,14 @@ class Toc
       @editor.insertText @_createToc()
 
 
-
   # ----------------------------------------------------------------------------
+
+
+  _getTabLength: () ->
+    try
+      tabLength = atom.config.get('editor.tabLength', scope: @editor.getRootScopeDescriptor())
+    catch error
+    return tabLength || 2
 
 
   _hasToc: () ->
@@ -94,19 +106,23 @@ class Toc
   _createToc: () ->
     @__updateList()
     @options.titleSize = if @options.titleSize isnt undefined then @options.titleSize else 2
-    @options.tabSpaces = if @options.tabSpaces isnt undefined then @options.tabSpaces else @editor.getTabLength()
+    @options.tabSpaces = if @options.tabSpaces isnt undefined then @options.tabSpaces else _getTabLength()
+    @options.skip = if @options.skip isnt undefined then @options.skip else 0
+    @options.title = if @options.title isnt undefined then @options.title else 1
+    @options.charForUnorderedList = if @options.charForUnorderedList isnt undefined then @options.charForUnorderedList else '*'
     if @options.tabSpaces > 0
         @tab = new String(" ").repeat(@options.tabSpaces)
     else
         @tab = "\t"
     if Object.keys(@list).length > 0
       text = []
-      text.push "<!-- TOC titleSize:"+@options.titleSize+" tabSpaces:"+@options.tabSpaces+" depthFrom:"+@options.depthFrom+" depthTo:"+@options.depthTo+" withLinks:"+@options.withLinks+" updateOnSave:"+@options.updateOnSave+" orderedList:"+@options.orderedList+" -->\n"
-      text.push new String("#").repeat(@options.titleSize) + " 目录(TOC)"
+      text.push "<!-- TOC titleSize:"+@options.titleSize+" tabSpaces:"+@options.tabSpaces+" depthFrom:"+@options.depthFrom+" depthTo:"+@options.depthTo+" withLinks:"+@options.withLinks+" updateOnSave:"+@options.updateOnSave+" orderedList:"+@options.orderedList+" skip:"+@options.skip+" title:"+@options.title+" charForUnorderedList:"+@options.charForUnorderedList+" -->"
+      if @options.title
+        text.push new String("#").repeat(@options.titleSize) + " Table of Contents"
       list = @__createList()
       if list isnt false
         Array.prototype.push.apply text, list
-      text.push "\n<!-- /TOC -->"
+      text.push "<!-- /TOC -->"
       return text.join "\n"
     return ""
 
@@ -143,18 +159,23 @@ class Toc
     depthFrom = if @options.depthFrom isnt undefined then @options.depthFrom else 1
     depthFirst = -1
     depthTo = if @options.depthTo isnt undefined then @options.depthTo else 6
+    skip = if @options.skip isnt undefined then @options.skip else 0
     indicesOfDepth = Array.apply(null, new Array(depthTo - depthFrom + 1)).map(Number.prototype.valueOf, 0);
 
     for own i, item of @list
+      if i < skip
+        continue
       row = []
       for tab in [depthFrom..item.depth] when tab > depthFirst
         if depthFirst isnt -1
           row.push @tab
+
       if @options.orderedList is 1
+        row.push @tab.repeat(item.depth-1)
         row.push ++indicesOfDepth[item.depth-1] + ". "
         indicesOfDepth = indicesOfDepth.map((value, index) -> if index < item.depth then value else 0)
       else
-        row.push "- "
+        row.push @options.charForUnorderedList+' '
         # jokin add
         if depthFirst is -1
           depthFirst = item.depth
@@ -174,7 +195,7 @@ class Toc
 
 
   __updateOptions: (line) ->
-    options = line.match /(\w+(=|:)(\d|yes|no))+/g
+    options = line.match /(\w+(=|:)(\d|yes|no|\*|\-))+/g
     if options
       @options = {}
       for i of options
@@ -183,7 +204,7 @@ class Toc
         key = option.match /^(\w+)/g
         key = new String key[0]
 
-        value = option.match /(\d|yes|no)$/g
+        value = option.match /(\d|yes|no|\*|\-)$/g
         value = new String value[0]
         if value.length > 1
           if value.toLowerCase().valueOf() is new String("yes").valueOf()
@@ -205,6 +226,12 @@ class Toc
           @options.titleSize = parseInt value
         else if key.toLowerCase().valueOf() is new String("tabSpaces").toLowerCase().valueOf()
           @options.tabSpaces = parseInt value
+        else if key.toLowerCase().valueOf() is new String("skip").toLowerCase().valueOf()
+          @options.skip = parseInt value
+        else if key.toLowerCase().valueOf() is new String("title").toLowerCase().valueOf()
+          @options.title = parseInt value
+        else if key.toLowerCase().valueOf() is new String("charForUnorderedList").toLowerCase().valueOf()
+          @options.charForUnorderedList = value
 
 
 
@@ -224,11 +251,7 @@ class Toc
   ___createLink: (name) ->
     hash = new String name
     hash = hash.toLowerCase().replace /\s/g, "-"
-    hash = hash.replace /[^a-z0-9\u4e00-\u9fa5äüö\-]/g, ""
-    if hash.indexOf("--") > -1
-      hash = hash.replace /(-)+/g, "-"
-    if name.indexOf(":-") > -1
-      hash = hash.replace /:-/g, "-"
+    hash = hash.replace /[^a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\-]/g, ""
     link = []
     link.push "["
     link.push name
